@@ -1,16 +1,35 @@
-# React + Vite
+# Anxiety, Louder Inside
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+불안 유형을 알아보는 모바일 전용 인터랙티브 퀴즈입니다. 시작 화면 → 질문 10개 → 결과 4종(A~D) 순서로 진행됩니다.
 
-Currently, two official plugins are available:
+**플레이하기:** https://karynadd.github.io/anxiety-quiz/
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 로컬 실행
 
-## React Compiler
+```bash
+npm install
+npm run dev
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+브라우저에서 `http://localhost:5173/anxiety-quiz/` 로 접속합니다.
 
-## Expanding the Oxlint configuration
+## 빌드
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+```bash
+npm run build
+```
+
+`dist/` 폴더에 정적 파일이 생성됩니다.
+
+## 기술 스택
+
+- React + Vite
+- 별도 상태관리/라우팅 라이브러리 없이 `useState` 기반 화면 전환
+
+## 결과 계산 규칙
+
+질문마다 A~D 중 하나를 선택하며, 가장 많이 선택된 알파벳이 결과가 됩니다. 동점일 경우 동점 알파벳 중 가장 마지막 질문에서 고른 답이 결과가 됩니다.
+
+## 배포
+
+`main` 브랜치에 push하면 GitHub Actions(`.github/workflows/deploy.yml`)가 자동으로 빌드 후 GitHub Pages에 배포합니다.
