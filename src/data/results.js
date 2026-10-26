@@ -28,7 +28,6 @@ export const results = {
     body: [
       "It can feel unpredictable, and difficult to hold onto. You may experience anxiety as a moment of collapse — when certainty disappears and your inner balance shifts without warning. This type of anxiety can feel especially overwhelming because it is not always gradual.",
     ],
-    // TODO: 하이픈 표기 디자이너 확인 필요
     headline2: "Falling - feeling, not a destination",
     closing: "Even in the dark, your body is still searching for ground.",
   },

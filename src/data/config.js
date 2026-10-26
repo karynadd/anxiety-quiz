@@ -6,5 +6,6 @@ export const START_FOOTER_LINES = [
   "There are no right answers — only reflections.",
 ];
 export const QUESTION_FOOTER_TEXT = "Choose the answer that feels closest to you";
-// TODO: 디자이너 확정 문구 확인
-export const RETRY_BUTTON_TEXT = "TRY AGAIN";
+export const RETRY_BUTTON_TEXT = "BACK TO THE START";
+export const RESULT_PRETITLE = "YOUR ANXIETY TAKES THE SHAPE OF...";
+export const RESULT_TOP_LABEL = APP_TITLE;

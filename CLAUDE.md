@@ -4,7 +4,7 @@
 - 화면: 시작 1개 / 질문 10개 / 결과 4종(결과 페이지 1개가 A~D에 따라 내용이 바뀜)
 - 질문 화면: 상단에 제목 + "01 / 10" 페이지 표시, 진행도 바
 - 이전 질문 기능 없음 (디자이너 결정)
-- 결과 화면: 다시하기 버튼
+- 결과 화면: 다시하기 버튼 (문구: "BACK TO THE START", 디자이너 확정). 상단 라벨(RESULT_TOP_LABEL=APP_TITLE)과 사전 문구(RESULT_PRETITLE="YOUR ANXIETY TAKES THE SHAPE OF...") 추가
 - 결과 계산: 가장 많이 선택된 알파벳(A~D). 동점이면 동점 알파벳 중 "가장 마지막 질문에서 고른 답"이 결과. 답은 질문 순서대로 저장하는 배열로 관리한다.
 - 모바일 전용 (데스크톱에서는 최대 폭만 제한, 프레임 연출 없음)
 - 디자이너가 PNG 에셋과 폰트를 줄 예정 (나중에 교체만 하면 됨)
@@ -16,7 +16,7 @@
 2. 데이터 파일 작성: 사용자가 질문 10개/선택지/결과 4종 문구를 줄 예정 → src/data에 분리 저장 (2단계 완료)
 3. 화면 3종 뼈대 (StartScreen, QuestionScreen, ResultScreen) (3단계 완료)
 4. 동작 로직 (화면 전환, 질문 번호, 진행도 바, 답 저장, 결과 계산, 다시하기) (4단계 완료)
-5. 스타일링 (목업 기준 다크 톤, 글로우, 선택지 카드)
+5. 스타일링 (목업 기준 다크 톤, 글로우, 선택지 카드) (5단계 완료)
 6. 에셋/폰트 적용 (PNG는 2x~3x 내보내기 기준, 업스케일 금지)
 7. 테스트 (A, B, C, D 4가지 결과와 동점 규칙이 모두 맞는지 확인)
 8. GitHub 제출: README 작성, git remote 연결과 push, Settings → Pages 설정 안내
@@ -45,6 +45,7 @@ src/
   App.jsx          (실제 퀴즈 흐름: start → question(0~9) → result → retry, 4단계 완료)
   utils/
     calculateResult.js (결과 계산 순수 함수, 4단계에서 작성 완료)
+    preloadAssets.js   (폰트 preload 링크 삽입 + 질문/결과 배경 Image 프리로드, 5단계에서 작성 완료)
   main.jsx
 scripts/
   validate-data.mjs   (questions/results 데이터 검증 스크립트)
@@ -65,6 +66,16 @@ scripts/
 - handleSelect는 setState의 비동기 특성을 피하기 위해 `nextAnswers = [...answers, key]`를 먼저 만들고, 마지막 질문이면 이 배열로 바로 calculateResult를 호출한다 (answers state를 바로 읽지 않음).
 - 화면/질문이 바뀔 때마다 useEffect로 window.scrollTo(0, 0) 실행.
 - 시각 디자인(글로우, 카드 스타일 등)은 아직 적용 안 함 — 5단계에서 진행.
+
+## 스타일링 메모 (5단계)
+- design/ 폴더에 실제 시안 이미지가 없어서, 5단계 지시문에 적힌 수치(px/퍼센트/색상)만으로 구현함. 나중에 실제 시안 이미지가 생기면 나란히 비교해서 다듬어야 한다.
+- 크기 체계: `--u: calc(min(100vw, 430px) / 330)` (global.css). 모든 컴포넌트 CSS는 "시안 px * var(--u)" 형태로 작성되어 있다.
+- 시작/질문 화면은 absolute 포지셔닝(제목 42%, 푸터 88% 등 지시문 퍼센트 그대로) 대신, 질문 화면은 **flex 레이아웃**을 썼다 — 보기 문구 길이가 질문마다 달라서 absolute % 위치로는 겹침이 생길 수 있어 flex column + justify-content:center로 바꿔 퍼센트 위치를 "근사"시켰다 (요구사항 5.4의 "가변 길이 대응"을 우선함). 시작 화면은 텍스트 길이가 고정이라 absolute %를 그대로 사용.
+- 결과 화면 카드 묶음도 flex column이고, 다시하기 버튼은 `margin-top: auto`로 내용이 짧으면 하단에 붙고(A/D), 내용이 길면(B/C) 카드 바로 아래 최소 간격(16u)만 두고 자연스럽게 이어진다 → 작은 화면에서는 페이지 자체가 세로 스크롤됨.
+- body 배열(B의 2문단)은 지시문대로 문단 margin 없이 공백 한 칸으로 join해서 한 덩어리 텍스트로 렌더링함 (ResultScreen.jsx `result.body.join(" ")`).
+- 폰트/이미지 프리로드는 `src/utils/preloadAssets.js`에서 처리 (App.jsx 마운트 시 1회 실행). JS에서 `.ttc`/`.ttf`를 import할 때는 `?url` 접미사가 필요했다 (안 붙이면 Vite가 바이너리를 텍스트로 읽으려다 빌드 에러 남 — UTF-8 아니라서 실패).
+- 화면 전환 fade-in은 `.screen-bg`에 CSS keyframes로 적용, `prefers-reduced-motion: reduce`면 꺼짐 (global.css).
+- 브라우저 자동화 환경에서 `backdrop-filter`가 걸린 화면은 스크린샷 캡처가 간헐적으로 멎는 현상이 있었다 (새 탭에서는 정상 캡처됨 — 실제 렌더링 문제가 아니라 이 환경의 CDP 스크린샷 도구 이슈로 보임). 실제 결과물에는 영향 없음.
 
 ## 주의
 - 요구사항에 없는 라이브러리(라우터, UI 프레임워크 등)는 설치하지 않는다.

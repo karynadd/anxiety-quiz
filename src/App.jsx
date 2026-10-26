@@ -5,6 +5,7 @@ import ResultScreen from "./components/ResultScreen";
 import { questions } from "./data/questions";
 import { results } from "./data/results";
 import { calculateResult } from "./utils/calculateResult";
+import { preloadFonts, preloadImages } from "./utils/preloadAssets";
 
 const TOTAL_QUESTIONS = questions.length;
 
@@ -13,6 +14,11 @@ function App() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState([]);
   const [resultKey, setResultKey] = useState(null);
+
+  useEffect(() => {
+    preloadFonts();
+    preloadImages();
+  }, []);
 
   useEffect(() => {
     window.scrollTo(0, 0);

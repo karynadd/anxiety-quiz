@@ -5,6 +5,10 @@
 
   --color-bg: #05060f;
   --color-text: #f5f5fa;
+  --color-coral: #e0605a;
+
+  /* 시안 폭 330px 기준 스케일. 430px 이상에서는 430/330으로 고정된다. */
+  --u: calc(min(100vw, 430px) / 330);
 }
 
 * {
@@ -49,6 +53,7 @@ button {
   -webkit-user-select: none;
   user-select: none;
   cursor: pointer;
+  touch-action: manipulation;
 }
 
 img {
@@ -62,4 +67,20 @@ img {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  animation: screen-fade-in 0.35s ease;
+}
+
+@keyframes screen-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .screen-bg {
+    animation: none;
+  }
 }
