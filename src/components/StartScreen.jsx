@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import {
   APP_TITLE,
   APP_SUBTITLE,
@@ -27,10 +28,10 @@ function StartScreen({ onStart }) {
 
       <p className="start-footer">
         {START_FOOTER_LINES.map((line, i) => (
-          <span key={i}>
+          <Fragment key={i}>
             {line}
             {i < START_FOOTER_LINES.length - 1 && <br />}
-          </span>
+          </Fragment>
         ))}
       </p>
     </div>
