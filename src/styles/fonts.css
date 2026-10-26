@@ -1,24 +1,21 @@
+@font-face {
+  font-family: 'Bodoni 72 Smallcaps Book';
+  src: url('../assets/fonts/bodoni-72-smallcaps-book.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 /*
-  디자이너가 폰트 파일을 전달하면 이 파일에 @font-face로 등록한다.
-  폰트 파일은 src/assets/fonts/ 에 넣고, 아래와 같은 형태로 선언한다.
-
-  예시:
-  @font-face {
-    font-family: 'TitleFont';
-    src: url('../assets/fonts/TitleFont.woff2') format('woff2');
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
-  }
-
-  @font-face {
-    font-family: 'BodyFont';
-    src: url('../assets/fonts/BodyFont.woff2') format('woff2');
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
-  }
-
-  등록 후 global.css의 --font-title / --font-body 변수를
-  'TitleFont', 'BodyFont' 로 교체한다.
+  TODO: Helvetica.ttc는 TrueType Collection(.ttc) 포맷으로,
+  브라우저 @font-face가 표준으로 보장하는 포맷(ttf/otf/woff/woff2)이 아니다.
+  현재는 format('truetype')으로 등록해두었으나, 실제 기기/브라우저에서
+  깨지면 디자이너에게 ttf/otf/woff2 파일을 다시 요청해야 한다.
 */
+@font-face {
+  font-family: 'Helvetica';
+  src: url('../assets/fonts/Helvetica.ttc') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}

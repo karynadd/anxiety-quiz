@@ -8,5 +8,3 @@ export const START_FOOTER_LINES = [
 export const QUESTION_FOOTER_TEXT = "Choose the answer that feels closest to you";
 // TODO: 디자이너 확정 문구 확인
 export const RETRY_BUTTON_TEXT = "TRY AGAIN";
-// TODO: 아이콘 사용 시 교체
-export const BACK_BUTTON_TEXT = "BACK";
