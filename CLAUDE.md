@@ -17,8 +17,8 @@
 3. 화면 3종 뼈대 (StartScreen, QuestionScreen, ResultScreen) (3단계 완료)
 4. 동작 로직 (화면 전환, 질문 번호, 진행도 바, 답 저장, 결과 계산, 다시하기) (4단계 완료)
 5. 스타일링 (목업 기준 다크 톤, 글로우, 선택지 카드) (5단계 완료)
-6. 에셋/폰트 적용 (PNG는 2x~3x 내보내기 기준, 업스케일 금지)
-7. 테스트 (A, B, C, D 4가지 결과와 동점 규칙이 모두 맞는지 확인)
+6. 에셋/폰트 적용 (PNG는 2x~3x 내보내기 기준, 업스케일 금지) (6단계 완료)
+7. 테스트 (A, B, C, D 4가지 결과와 동점 규칙이 모두 맞는지 확인) (7단계 완료)
 8. GitHub 제출: README 작성, git remote 연결과 push, Settings → Pages 설정 안내
    - 사용자는 GitHub 사용이 처음이다. 8단계에서는 명령어와 클릭 위치를 하나씩 쉽게 안내할 것.
 
@@ -57,7 +57,9 @@ scripts/
 - `Bodoni 72 Smallcaps Book.ttf`는 원래 파일명에 공백이 있어 `bodoni-72-smallcaps-book.ttf`로 사용자 승인 하에 변경함 (git mv로 이력 보존).
 - `Helvetica.ttc`는 TrueType Collection 포맷이라 브라우저 @font-face 표준 포맷(ttf/otf/woff/woff2)이 아님. 사용자 승인으로 일단 `format('truetype')`으로 등록해둔 상태. 실제 기기에서 깨지면 디자이너에게 ttf/otf/woff2로 재요청 필요 (fonts.css에 TODO 주석 있음).
 - PNG 파일명(IntroPage, Q1~Q10, Button, Result1~4)은 대문자가 섞여 있지만 공백/한글은 없고 ESM import로만 참조하므로 변경하지 않음.
-- PNG는 전부 1.5MB를 초과함 (1.56MB~2.35MB). 6단계(에셋/폰트 적용) 전까지는 그대로 두되, 실제 배포 전 최적화 필요 여부를 다시 검토할 것.
+- PNG는 전부 1.5MB를 초과함 (1.56MB~2.35MB, 16개 합계 약 27MB). 6단계에서 사용자에게 확인 후 "일단 그대로 두고 배포 후 체감 속도 보고 판단"으로 결정함. 나중에 로딩이 느리다고 느껴지면 압축 고려.
+- 해상도 검증(6단계): 배경/결과 PNG는 전부 941x1672, 앱 렌더 최대 폭이 430px로 고정이라 약 2.19배 — 2x 기기에서는 선명하고, 극히 일부 430px 근처 3x 기기에서만 아주 약간 늘어날 수 있는 정도. 업스케일 없음, 기준 충족.
+- `src/assets/icons/Button.png`는 assets.js에 import만 되어 있고 실제 화면에는 전혀 쓰이지 않음 (버튼은 전부 CSS 그라디언트). 6단계에서 사용자 확인 후 "그대로 두기"로 결정 — 나중에 이미지 기반 버튼으로 바꿀 수도 있어서 카탈로그 용도로 남겨둠.
 - A=Result1.png / B=Result2.png / C=Result3.png / D=Result4.png 매칭은 이미지 내용(눈/얽힌 실/추락하는 협곡/구체)이 각 결과 문구와 일치하는 것을 직접 확인함.
 
 ## 동작 로직 메모 (4단계)
@@ -76,6 +78,11 @@ scripts/
 - 폰트/이미지 프리로드는 `src/utils/preloadAssets.js`에서 처리 (App.jsx 마운트 시 1회 실행). JS에서 `.ttc`/`.ttf`를 import할 때는 `?url` 접미사가 필요했다 (안 붙이면 Vite가 바이너리를 텍스트로 읽으려다 빌드 에러 남 — UTF-8 아니라서 실패).
 - 화면 전환 fade-in은 `.screen-bg`에 CSS keyframes로 적용, `prefers-reduced-motion: reduce`면 꺼짐 (global.css).
 - 브라우저 자동화 환경에서 `backdrop-filter`가 걸린 화면은 스크린샷 캡처가 간헐적으로 멎는 현상이 있었다 (새 탭에서는 정상 캡처됨 — 실제 렌더링 문제가 아니라 이 환경의 CDP 스크린샷 도구 이슈로 보임). 실제 결과물에는 영향 없음.
+
+## 테스트 메모 (7단계)
+- `node scripts/validate-data.mjs`, `node scripts/test-calculate.mjs` 전부 통과 (6/6 동점 케이스 포함).
+- 브라우저 실클릭(JS 자동화)으로 전체 플레이 5회 확인: 전부 A→Watching Eyes, 전부 B→Tangled Threads, 전부 C→Falling Void, 전부 D→Silent Bubble, 동점(A,A,A,A,B,B,B,B,C,D)→Tangled Threads(B). 콘솔 에러 없음.
+- 질문 화면 레이아웃 버그(질문 길이에 따라 페이지 높이/배경 확대율이 들쭉날쭉하던 문제)를 고정 margin-top 대신 flex 스페이서(`::before`)로 교체해서 해결함 — 10개 질문 전부 페이지 높이가 뷰포트와 정확히 일치하는 것 확인.
 
 ## 주의
 - 요구사항에 없는 라이브러리(라우터, UI 프레임워크 등)는 설치하지 않는다.
