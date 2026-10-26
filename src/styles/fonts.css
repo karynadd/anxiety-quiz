@@ -1,0 +1,24 @@
+/*
+  디자이너가 폰트 파일을 전달하면 이 파일에 @font-face로 등록한다.
+  폰트 파일은 src/assets/fonts/ 에 넣고, 아래와 같은 형태로 선언한다.
+
+  예시:
+  @font-face {
+    font-family: 'TitleFont';
+    src: url('../assets/fonts/TitleFont.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'BodyFont';
+    src: url('../assets/fonts/BodyFont.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  등록 후 global.css의 --font-title / --font-body 변수를
+  'TitleFont', 'BodyFont' 로 교체한다.
+*/
