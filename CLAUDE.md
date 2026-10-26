@@ -12,7 +12,7 @@
 
 ## 전체 진행 순서
 1. 프로젝트 세팅 (완료)
-2. 데이터 파일 작성: 사용자가 질문 10개/선택지/결과 4종 문구를 줄 예정 → src/data에 분리 저장
+2. 데이터 파일 작성: 사용자가 질문 10개/선택지/결과 4종 문구를 줄 예정 → src/data에 분리 저장 (2단계 완료)
 3. 화면 3종 뼈대 (StartScreen, QuestionScreen, ResultScreen)
 4. 동작 로직 (화면 전환, 질문 번호, 진행도 바, 답 저장, 이전 질문, 결과 계산, 다시하기)
 5. 스타일링 (목업 기준 다크 톤, 글로우, 선택지 카드)
@@ -30,7 +30,10 @@ src/
     results/       (결과 4종 이미지 PNG)
     fonts/         (디자이너 제공 폰트)
   components/      (StartScreen, QuestionScreen, ResultScreen 자리 - 아직 미구현)
-  data/            (questions, results 데이터 파일 자리 - 아직 미구현)
+  data/
+    questions.js   (질문 10개 + 보기, 2단계에서 작성 완료)
+    results.js     (결과 A~D 문구, 2단계에서 작성 완료)
+    config.js      (앱 제목/버튼 문구 등, 2단계에서 작성 완료)
   styles/
     fonts.css      (@font-face 등록 자리. 폰트 파일이 오면 채움)
     global.css     (모바일 전용 기본 스타일, --font-title / --font-body 변수)
