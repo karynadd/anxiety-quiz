@@ -1,52 +1,81 @@
-// TEMP: 4단계에서 실제 로직으로 교체
-import { useMemo } from "react";
+import { useEffect, useState } from "react";
 import StartScreen from "./components/StartScreen";
 import QuestionScreen from "./components/QuestionScreen";
 import ResultScreen from "./components/ResultScreen";
 import { questions } from "./data/questions";
 import { results } from "./data/results";
+import { calculateResult } from "./utils/calculateResult";
 
-function readParams() {
-  const params = new URLSearchParams(window.location.search);
-  const screen = params.get("screen") || "start";
-  const q = Number(params.get("q")) || 1;
-  const key = (params.get("key") || "A").toUpperCase();
-  return { screen, q, key };
-}
+const TOTAL_QUESTIONS = questions.length;
 
 function App() {
-  const { screen, q, key } = useMemo(readParams, []);
+  const [screen, setScreen] = useState("start");
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [answers, setAnswers] = useState([]);
+  const [resultKey, setResultKey] = useState(null);
 
-  let content;
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [screen, currentIndex]);
+
+  function handleStart() {
+    setAnswers([]);
+    setCurrentIndex(0);
+    setScreen("question");
+  }
+
+  function handleSelect(key) {
+    const nextAnswers = [...answers, key];
+    setAnswers(nextAnswers);
+
+    if (currentIndex + 1 < TOTAL_QUESTIONS) {
+      setCurrentIndex(currentIndex + 1);
+    } else {
+      setResultKey(calculateResult(nextAnswers));
+      setScreen("result");
+    }
+  }
+
+  function handleRetry() {
+    setAnswers([]);
+    setCurrentIndex(0);
+    setResultKey(null);
+    setScreen("start");
+  }
 
   if (screen === "question") {
-    const question = questions.find((item) => item.id === q) ?? questions[0];
-    content = (
-      <QuestionScreen
-        question={question}
-        currentIndex={question.id}
-        total={questions.length}
-        onSelect={(selectedKey) =>
-          console.log(`TEMP: selected ${selectedKey} for Q${question.id}`)
-        }
-      />
-    );
-  } else if (screen === "result") {
-    const result = results[key] ?? results.A;
-    content = (
-      <ResultScreen
-        result={result}
-        resultKey={result.key}
-        onRetry={() => console.log("TEMP: retry clicked")}
-      />
-    );
-  } else {
-    content = (
-      <StartScreen onStart={() => console.log("TEMP: start clicked")} />
+    const question = questions[currentIndex];
+    return (
+      <div className="app">
+        <QuestionScreen
+          key={currentIndex}
+          question={question}
+          currentIndex={currentIndex}
+          total={TOTAL_QUESTIONS}
+          onSelect={handleSelect}
+        />
+      </div>
     );
   }
 
-  return <div className="app">{content}</div>;
+  if (screen === "result") {
+    const result = results[resultKey];
+    return (
+      <div className="app">
+        <ResultScreen
+          result={result}
+          resultKey={resultKey}
+          onRetry={handleRetry}
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div className="app">
+      <StartScreen onStart={handleStart} />
+    </div>
+  );
 }
 
 export default App;

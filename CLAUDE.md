@@ -15,7 +15,7 @@
 1. 프로젝트 세팅 (완료)
 2. 데이터 파일 작성: 사용자가 질문 10개/선택지/결과 4종 문구를 줄 예정 → src/data에 분리 저장 (2단계 완료)
 3. 화면 3종 뼈대 (StartScreen, QuestionScreen, ResultScreen) (3단계 완료)
-4. 동작 로직 (화면 전환, 질문 번호, 진행도 바, 답 저장, 결과 계산, 다시하기)
+4. 동작 로직 (화면 전환, 질문 번호, 진행도 바, 답 저장, 결과 계산, 다시하기) (4단계 완료)
 5. 스타일링 (목업 기준 다크 톤, 글로우, 선택지 카드)
 6. 에셋/폰트 적용 (PNG는 2x~3x 내보내기 기준, 업스케일 금지)
 7. 테스트 (A, B, C, D 4가지 결과와 동점 규칙이 모두 맞는지 확인)
@@ -42,10 +42,13 @@ src/
   styles/
     fonts.css      (@font-face 등록 완료: Bodoni 72 Smallcaps Book, Helvetica)
     global.css     (모바일 전용 기본 스타일, --font-title / --font-body 변수, .screen-bg 공통 배경 클래스)
-  App.jsx          (TEMP: URL 쿼리로 화면 전환 확인용. 4단계에서 실제 로직으로 교체)
+  App.jsx          (실제 퀴즈 흐름: start → question(0~9) → result → retry, 4단계 완료)
+  utils/
+    calculateResult.js (결과 계산 순수 함수, 4단계에서 작성 완료)
   main.jsx
 scripts/
-  validate-data.mjs (questions/results 데이터 검증 스크립트)
+  validate-data.mjs   (questions/results 데이터 검증 스크립트)
+  test-calculate.mjs  (calculateResult 동점 규칙 테스트, 4단계에서 작성 완료)
 ```
 
 ## 에셋/폰트 메모
@@ -56,8 +59,14 @@ scripts/
 - PNG는 전부 1.5MB를 초과함 (1.56MB~2.35MB). 6단계(에셋/폰트 적용) 전까지는 그대로 두되, 실제 배포 전 최적화 필요 여부를 다시 검토할 것.
 - A=Result1.png / B=Result2.png / C=Result3.png / D=Result4.png 매칭은 이미지 내용(눈/얽힌 실/추락하는 협곡/구체)이 각 결과 문구와 일치하는 것을 직접 확인함.
 
+## 동작 로직 메모 (4단계)
+- App.jsx의 currentIndex는 0-based (0~9). QuestionScreen에는 그대로 전달하고, 컴포넌트 내부에서 +1 해서 페이지 번호/진행도("01/10", 채움 비율)를 계산한다.
+- 더블 탭 방지는 QuestionScreen 내부 useRef 플래그로 처리한다. App이 질문마다 `key={currentIndex}`로 QuestionScreen을 새로 마운트하므로, 질문이 바뀔 때마다 플래그가 자동으로 초기화된다.
+- handleSelect는 setState의 비동기 특성을 피하기 위해 `nextAnswers = [...answers, key]`를 먼저 만들고, 마지막 질문이면 이 배열로 바로 calculateResult를 호출한다 (answers state를 바로 읽지 않음).
+- 화면/질문이 바뀔 때마다 useEffect로 window.scrollTo(0, 0) 실행.
+- 시각 디자인(글로우, 카드 스타일 등)은 아직 적용 안 함 — 5단계에서 진행.
+
 ## 주의
 - 요구사항에 없는 라이브러리(라우터, UI 프레임워크 등)는 설치하지 않는다.
-- 화면 전환/진행도 계산/결과 계산 등 실제 동작 로직은 다음 단계(4단계)에서 진행한다.
 - vite.config.js의 base는 '/anxiety-quiz/' (GitHub Pages 배포 경로)로 고정되어 있다. 저장소 이름이 바뀌면 함께 수정해야 한다.
 - 디자이너가 PNG/폰트를 GitHub 웹 UI로 직접 업로드하는 경우가 있다 (로컬 폴더가 아니라 저장소에 바로 커밋됨). 이 경우 로컬에서는 `git fetch` + `git merge origin/main`으로 받아와야 보인다.

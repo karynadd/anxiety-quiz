@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { APP_TITLE, QUESTION_FOOTER_TEXT } from "../data/config";
 import { questionAssets } from "../data/assets";
 import "./QuestionScreen.css";
@@ -7,8 +8,19 @@ function pad2(n) {
 }
 
 function QuestionScreen({ question, currentIndex, total, onSelect }) {
-  const progressPercent = (currentIndex / total) * 100;
+  const pageNumber = currentIndex + 1;
+  const progressPercent = (pageNumber / total) * 100;
   const background = questionAssets[question.id]?.background;
+
+  // 질문이 바뀔 때마다 QuestionScreen이 key={currentIndex}로 새로 마운트되므로
+  // 이 ref는 매 질문마다 false로 초기화된다. 연타로 answers가 중복 저장되는 것을 막는다.
+  const lockedRef = useRef(false);
+
+  function handleSelect(key) {
+    if (lockedRef.current) return;
+    lockedRef.current = true;
+    onSelect(key);
+  }
 
   return (
     <div
@@ -18,7 +30,7 @@ function QuestionScreen({ question, currentIndex, total, onSelect }) {
       <div className="question-screen__top">
         <span className="question-screen__app-title">{APP_TITLE}</span>
         <span className="question-screen__page">
-          {pad2(currentIndex)} / {pad2(total)}
+          {pad2(pageNumber)} / {pad2(total)}
         </span>
       </div>
 
@@ -38,7 +50,7 @@ function QuestionScreen({ question, currentIndex, total, onSelect }) {
               key={option.key}
               type="button"
               className="question-screen__option"
-              onClick={() => onSelect(option.key)}
+              onClick={() => handleSelect(option.key)}
             >
               <span className="question-screen__option-key">
                 {option.key}
