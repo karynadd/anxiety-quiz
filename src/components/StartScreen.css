@@ -58,7 +58,7 @@
   top: 88%;
   left: 50%;
   transform: translateX(-50%);
-  width: calc(230 * var(--u));
+  width: calc(250 * var(--u));
   max-width: calc(100% - calc(20 * var(--u)));
   display: flex;
   flex-direction: column;
