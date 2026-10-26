@@ -53,7 +53,7 @@
   box-shadow: 0 calc(4 * var(--u)) calc(18 * var(--u)) rgba(140, 150, 255, 0.6);
 }
 
-.start-screen__footer {
+.start-footer {
   position: absolute;
   top: 88%;
   left: 50%;
@@ -65,9 +65,6 @@
   gap: calc(6 * var(--u));
   text-align: center;
   padding-bottom: env(safe-area-inset-bottom);
-}
-
-.start-screen__footer p {
   margin: 0;
   font-family: var(--font-body);
   font-size: calc(10 * var(--u));
