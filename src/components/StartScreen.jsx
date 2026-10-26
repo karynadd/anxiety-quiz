@@ -25,11 +25,14 @@ function StartScreen({ onStart }) {
         </button>
       </div>
 
-      <div className="start-screen__footer">
-        {START_FOOTER_LINES.map((line) => (
-          <p key={line}>{line}</p>
+      <p className="start-footer">
+        {START_FOOTER_LINES.map((line, i) => (
+          <span key={i}>
+            {line}
+            {i < START_FOOTER_LINES.length - 1 && <br />}
+          </span>
         ))}
-      </div>
+      </p>
     </div>
   );
 }
