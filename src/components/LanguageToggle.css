@@ -1,0 +1,33 @@
+.lang-toggle {
+  position: relative;
+  flex-shrink: 0;
+  padding: calc(3 * var(--u)) calc(8 * var(--u));
+  border: 1px solid rgba(184, 189, 255, 0.6);
+  border-radius: calc(10 * var(--u));
+  background-color: rgba(30, 35, 100, 0.55);
+  color: #ffffff;
+  font-family: var(--font-body);
+  font-size: calc(9 * var(--u));
+  line-height: 1.2;
+  letter-spacing: 0.08em;
+}
+
+/* 버튼 자체는 작게 보이되, 손가락으로 누르기 쉽게 터치 영역만 넓힌다. */
+.lang-toggle::before {
+  content: "";
+  position: absolute;
+  inset: -10px;
+}
+
+.lang-toggle:active {
+  border-color: #b8bdff;
+  background-color: rgba(45, 50, 140, 0.75);
+}
+
+/* 시작/결과 화면: 화면 우측 상단 모서리에 고정 */
+.lang-toggle--corner {
+  position: absolute;
+  top: calc(12 * var(--u) + env(safe-area-inset-top));
+  right: calc(12 * var(--u));
+  z-index: 2;
+}

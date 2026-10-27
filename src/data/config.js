@@ -10,3 +10,5 @@ export const QUESTION_FOOTER_TEXT = "Choose the answer that feels closest to you
 export const RETRY_BUTTON_TEXT = "BACK TO THE START";
 export const RESULT_PRETITLE = "YOUR ANXIETY TAKES THE SHAPE OF...";
 export const RESULT_TOP_LABEL = APP_TITLE;
+export const LANG_TOGGLE_TEXT = "KO";
+export const LANG_TOGGLE_ARIA = "한국어로 보기";

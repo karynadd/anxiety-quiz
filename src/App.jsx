@@ -2,18 +2,29 @@ import { useEffect, useState } from "react";
 import StartScreen from "./components/StartScreen";
 import QuestionScreen from "./components/QuestionScreen";
 import ResultScreen from "./components/ResultScreen";
-import { questions } from "./data/questions";
-import { results } from "./data/results";
+import { content, DEFAULT_LANG } from "./data/content";
 import { calculateResult } from "./utils/calculateResult";
 import { preloadFonts, preloadImages } from "./utils/preloadAssets";
 
-const TOTAL_QUESTIONS = questions.length;
+const TOTAL_QUESTIONS = content[DEFAULT_LANG].questions.length;
+const LANG_STORAGE_KEY = "anxiety-quiz-lang";
+
+function loadLang() {
+  try {
+    const saved = window.localStorage.getItem(LANG_STORAGE_KEY);
+    return Object.hasOwn(content, saved) ? saved : DEFAULT_LANG;
+  } catch {
+    return DEFAULT_LANG;
+  }
+}
 
 function App() {
   const [screen, setScreen] = useState("start");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState([]);
   const [resultKey, setResultKey] = useState(null);
+  const [lang, setLang] = useState(loadLang);
+  const { config, questions, results } = content[lang];
 
   useEffect(() => {
     preloadFonts();
@@ -23,6 +34,19 @@ function App() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [screen, currentIndex]);
+
+  useEffect(() => {
+    document.documentElement.lang = lang;
+    try {
+      window.localStorage.setItem(LANG_STORAGE_KEY, lang);
+    } catch {
+      // 저장이 막힌 환경(시크릿 모드 등)에서는 이번 방문 동안만 유지된다.
+    }
+  }, [lang]);
+
+  function handleToggleLang() {
+    setLang((prev) => (prev === "en" ? "ko" : "en"));
+  }
 
   function handleStart() {
     setAnswers([]);
@@ -59,6 +83,8 @@ function App() {
           currentIndex={currentIndex}
           total={TOTAL_QUESTIONS}
           onSelect={handleSelect}
+          text={config}
+          onToggleLang={handleToggleLang}
         />
       </div>
     );
@@ -72,6 +98,8 @@ function App() {
           result={result}
           resultKey={resultKey}
           onRetry={handleRetry}
+          text={config}
+          onToggleLang={handleToggleLang}
         />
       </div>
     );
@@ -79,7 +107,11 @@ function App() {
 
   return (
     <div className="app">
-      <StartScreen onStart={handleStart} />
+      <StartScreen
+        onStart={handleStart}
+        text={config}
+        onToggleLang={handleToggleLang}
+      />
     </div>
   );
 }

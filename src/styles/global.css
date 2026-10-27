@@ -56,6 +56,12 @@ button {
   touch-action: manipulation;
 }
 
+/* 한글은 어절 단위로 줄바꿈해야 단어가 중간에 끊기지 않는다. */
+:lang(ko) body {
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
 img {
   max-width: 100%;
   display: block;

@@ -1,19 +1,28 @@
 import { Fragment } from "react";
-import {
-  APP_TITLE,
-  APP_SUBTITLE,
-  START_BUTTON_TEXT,
-  START_FOOTER_LINES,
-} from "../data/config";
+import LanguageToggle from "./LanguageToggle";
 import { introAssets } from "../data/assets";
 import "./StartScreen.css";
 
-function StartScreen({ onStart }) {
+function StartScreen({ onStart, text, onToggleLang }) {
+  const {
+    APP_TITLE,
+    APP_SUBTITLE,
+    START_BUTTON_TEXT,
+    START_FOOTER_LINES,
+  } = text;
+
   return (
     <div
       className="screen-bg start-screen"
       style={{ backgroundImage: `url(${introAssets.background})` }}
     >
+      <LanguageToggle
+        className="lang-toggle--corner"
+        label={text.LANG_TOGGLE_TEXT}
+        ariaLabel={text.LANG_TOGGLE_ARIA}
+        onToggle={onToggleLang}
+      />
+
       <div className="start-screen__center">
         <h1 className="start-screen__title">{APP_TITLE}</h1>
         <p className="start-screen__subtitle">{APP_SUBTITLE}</p>

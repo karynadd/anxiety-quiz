@@ -1,4 +1,5 @@
 .result-screen {
+  position: relative;
   display: flex;
   flex-direction: column;
   min-height: 100dvh;
@@ -85,4 +86,9 @@
 
 .result-screen__retry:active {
   box-shadow: 0 calc(4 * var(--u)) calc(18 * var(--u)) rgba(140, 150, 255, 0.6);
+}
+
+/* 한글은 대문자/자간 효과가 없어서 넓은 자간만 남으므로 줄인다. */
+:lang(ko) .result-screen__pretitle {
+  letter-spacing: 0.05em;
 }

@@ -1,12 +1,9 @@
-import {
-  RETRY_BUTTON_TEXT,
-  RESULT_PRETITLE,
-  RESULT_TOP_LABEL,
-} from "../data/config";
 import { resultAssets } from "../data/assets";
+import LanguageToggle from "./LanguageToggle";
 import "./ResultScreen.css";
 
-function ResultScreen({ result, resultKey, onRetry }) {
+function ResultScreen({ result, resultKey, onRetry, text, onToggleLang }) {
+  const { RETRY_BUTTON_TEXT, RESULT_PRETITLE, RESULT_TOP_LABEL } = text;
   const background = resultAssets[resultKey]?.background;
 
   return (
@@ -14,6 +11,13 @@ function ResultScreen({ result, resultKey, onRetry }) {
       className="screen-bg result-screen"
       style={{ backgroundImage: `url(${background})` }}
     >
+      <LanguageToggle
+        className="lang-toggle--corner"
+        label={text.LANG_TOGGLE_TEXT}
+        ariaLabel={text.LANG_TOGGLE_ARIA}
+        onToggle={onToggleLang}
+      />
+
       <p className="result-screen__top-label">{RESULT_TOP_LABEL}</p>
       <p className="result-screen__pretitle">{RESULT_PRETITLE}</p>
       <h1 className="result-screen__title">{result.title}</h1>

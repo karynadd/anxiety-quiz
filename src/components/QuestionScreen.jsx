@@ -1,13 +1,21 @@
 import { useRef, useState } from "react";
-import { APP_TITLE, QUESTION_FOOTER_TEXT } from "../data/config";
 import { questionAssets } from "../data/assets";
+import LanguageToggle from "./LanguageToggle";
 import "./QuestionScreen.css";
 
 function pad2(n) {
   return String(n).padStart(2, "0");
 }
 
-function QuestionScreen({ question, currentIndex, total, onSelect }) {
+function QuestionScreen({
+  question,
+  currentIndex,
+  total,
+  onSelect,
+  text,
+  onToggleLang,
+}) {
+  const { APP_TITLE, QUESTION_FOOTER_TEXT } = text;
   const pageNumber = currentIndex + 1;
   const progressPercent = (pageNumber / total) * 100;
   const background = questionAssets[question.id]?.background;
@@ -31,8 +39,15 @@ function QuestionScreen({ question, currentIndex, total, onSelect }) {
     >
       <div className="question-screen__top">
         <span className="question-screen__app-title">{APP_TITLE}</span>
-        <span className="question-screen__page">
-          {pad2(pageNumber)} / {pad2(total)}
+        <span className="question-screen__top-right">
+          <span className="question-screen__page">
+            {pad2(pageNumber)} / {pad2(total)}
+          </span>
+          <LanguageToggle
+            label={text.LANG_TOGGLE_TEXT}
+            ariaLabel={text.LANG_TOGGLE_ARIA}
+            onToggle={onToggleLang}
+          />
         </span>
       </div>
 

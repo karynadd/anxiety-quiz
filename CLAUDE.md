@@ -84,6 +84,15 @@ scripts/
 - 브라우저 실클릭(JS 자동화)으로 전체 플레이 5회 확인: 전부 A→Watching Eyes, 전부 B→Tangled Threads, 전부 C→Falling Void, 전부 D→Silent Bubble, 동점(A,A,A,A,B,B,B,B,C,D)→Tangled Threads(B). 콘솔 에러 없음.
 - 질문 화면 레이아웃 버그(질문 길이에 따라 페이지 높이/배경 확대율이 들쭉날쭉하던 문제)를 고정 margin-top 대신 flex 스페이서(`::before`)로 교체해서 해결함 — 10개 질문 전부 페이지 높이가 뷰포트와 정확히 일치하는 것 확인.
 
+## 다국어(EN ↔ KO) 메모 (추가 작업)
+- 영어 문구는 기존 `src/data/config.js / questions.js / results.js` 그대로, 한글은 `src/data/ko/`에 같은 구조로 분리. `src/data/content.js`가 `content.en / content.ko`로 묶는다.
+- 한글 문구는 Claude가 작성한 초안 → 사용자/디자이너 검수 후 `src/data/ko/` 파일만 고치면 됨.
+- App.jsx가 `lang` 상태를 갖고 각 화면에 `text`(해당 언어 config)와 `onToggleLang`을 넘긴다. 선택 언어는 localStorage(`anxiety-quiz-lang`)에 저장되고 다시하기 후에도 유지된다.
+- 토글 버튼(`LanguageToggle`)은 시작/결과 화면에서는 우측 상단 모서리, 질문 화면에서는 "01 / 10" 옆에 둔다 (페이지 번호와 겹치지 않게).
+- `<html lang>`을 언어에 맞춰 바꾸고, `:lang(ko)`에서 `word-break: keep-all`(어절 단위 줄바꿈) 적용.
+- Bodoni/Helvetica에는 한글 글리프가 없어서 한글은 기기 기본 폰트로 표시된다. 디자이너가 한글 폰트를 주면 fonts.css에 추가하면 됨.
+- `validate-data.mjs`가 ko 데이터가 영어와 같은 구조인지(질문 id, 보기 key, 결과 필드, config 항목)도 검사한다.
+
 ## 주의
 - 요구사항에 없는 라이브러리(라우터, UI 프레임워크 등)는 설치하지 않는다.
 - vite.config.js의 base는 '/anxiety-quiz/' (GitHub Pages 배포 경로)로 고정되어 있다. 저장소 이름이 바뀌면 함께 수정해야 한다.
