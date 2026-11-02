@@ -1,0 +1,108 @@
+/* ==========================================================================
+   글자 뒤 그림자 위치 조절 파일
+
+   아래 :root 안의 숫자만 바꾸면 됩니다. 저장하면 브라우저에 바로 반영됩니다.
+
+   -x       : 좌우 이동. 양수 = 오른쪽, 음수 = 왼쪽 (0 = 가운데)
+   -y       : 상하 이동. 양수 = 아래, 음수 = 위
+   -scale   : 크기. 1 = 화면 폭과 같음, 1.2 = 20% 크게 (비율은 자동 유지)
+   -opacity : 진하기. 0 = 안 보임, 1 = 이미지 원본 그대로
+
+   -x, -y 단위는 다른 CSS와 같은 시안 px입니다 (화면 폭 330 기준, 기기 폭에 맞춰 자동 확대).
+   ========================================================================== */
+:root {
+  /* 시작 화면: 제목/버튼 뒤. 기준점 = 화면 세로 정중앙 */
+  --shadow-intro-x: 0;
+  --shadow-intro-y: 0;
+  --shadow-intro-scale: 1;
+  --shadow-intro-opacity: 1;
+
+  /* 질문 화면 상단 바: 제목/페이지 번호/진행도 바 뒤. 기준점 = 화면 맨 위 */
+  --shadow-upperbar-x: 0;
+  --shadow-upperbar-y: 0;
+  --shadow-upperbar-scale: 1;
+  --shadow-upperbar-opacity: 1;
+
+  /* 질문 화면: 질문 문구 뒤. 기준점 = 질문 문구의 정중앙 (문구가 길어져도 따라감) */
+  --shadow-question-x: 0;
+  --shadow-question-y: 0;
+  --shadow-question-scale: 1;
+  --shadow-question-opacity: 1;
+
+  /* 결과 화면: 상단 제목 뒤. 기준점 = 화면 맨 위 */
+  --shadow-result-x: 0;
+  --shadow-result-y: 0;
+  --shadow-result-scale: 1;
+  --shadow-result-opacity: 1;
+}
+
+/* --------------------------------------------------------------------------
+   여기부터는 그림자를 그리는 코드입니다. 위치 조절만 할 때는 고칠 필요 없습니다.
+   -------------------------------------------------------------------------- */
+.start-screen::before,
+.question-screen::before,
+.question-screen__text::before,
+.result-screen::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  z-index: -1; /* 배경 위, 글자 아래 (.screen-bg의 isolation 기준) */
+  width: calc(min(100vw, 430px) * var(--shadow-scale));
+  background-position: center;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  opacity: var(--shadow-opacity);
+  pointer-events: none;
+}
+
+.start-screen::before {
+  --shadow-scale: var(--shadow-intro-scale);
+  --shadow-opacity: var(--shadow-intro-opacity);
+  top: 50%;
+  aspect-ratio: 1560 / 2148;
+  background-image: url("../assets/shadows/ShadowIntoScreen.webp");
+  transform: translate(
+    calc(-50% + var(--shadow-intro-x) * var(--u)),
+    calc(-50% + var(--shadow-intro-y) * var(--u))
+  );
+}
+
+.question-screen::before {
+  --shadow-scale: var(--shadow-upperbar-scale);
+  --shadow-opacity: var(--shadow-upperbar-opacity);
+  top: 0;
+  aspect-ratio: 1560 / 672;
+  background-image: url("../assets/shadows/ShadowUpperBar.webp");
+  transform: translate(
+    calc(-50% + var(--shadow-upperbar-x) * var(--u)),
+    calc(var(--shadow-upperbar-y) * var(--u))
+  );
+}
+
+.question-screen__text {
+  position: relative;
+}
+
+.question-screen__text::before {
+  --shadow-scale: var(--shadow-question-scale);
+  --shadow-opacity: var(--shadow-question-opacity);
+  top: 50%;
+  aspect-ratio: 1560 / 1284;
+  background-image: url("../assets/shadows/ShadowQuestion.webp");
+  transform: translate(
+    calc(-50% + var(--shadow-question-x) * var(--u)),
+    calc(-50% + var(--shadow-question-y) * var(--u))
+  );
+}
+
+.result-screen::before {
+  --shadow-scale: var(--shadow-result-scale);
+  --shadow-opacity: var(--shadow-result-opacity);
+  top: 0;
+  aspect-ratio: 1560 / 1128;
+  background-image: url("../assets/shadows/ShadowResultHead.webp");
+  transform: translate(
+    calc(-50% + var(--shadow-result-x) * var(--u)),
+    calc(var(--shadow-result-y) * var(--u))
+  );
+}

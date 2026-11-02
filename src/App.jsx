@@ -1,10 +1,15 @@
 import { useEffect, useState } from "react";
 import StartScreen from "./components/StartScreen";
 import QuestionScreen from "./components/QuestionScreen";
+import ProfileScreen from "./components/ProfileScreen";
 import ResultScreen from "./components/ResultScreen";
 import { content, DEFAULT_LANG } from "./data/content";
 import { calculateResult } from "./utils/calculateResult";
-import { preloadFonts, preloadImages } from "./utils/preloadAssets";
+import {
+  preloadFonts,
+  preloadImages,
+  preloadKoreanFonts,
+} from "./utils/preloadAssets";
 
 const TOTAL_QUESTIONS = content[DEFAULT_LANG].questions.length;
 const LANG_STORAGE_KEY = "anxiety-quiz-lang";
@@ -37,6 +42,7 @@ function App() {
 
   useEffect(() => {
     document.documentElement.lang = lang;
+    if (lang === "ko") preloadKoreanFonts();
     try {
       window.localStorage.setItem(LANG_STORAGE_KEY, lang);
     } catch {
@@ -62,8 +68,22 @@ function App() {
       setCurrentIndex(currentIndex + 1);
     } else {
       setResultKey(calculateResult(nextAnswers));
-      setScreen("result");
+      setScreen("profile");
     }
+  }
+
+  function handleShowResult() {
+    setScreen("result");
+  }
+
+  // answers는 질문 순서대로 쌓이므로 마지막 답만 지우면 그 질문을 다시 고를 수 있다.
+  function handleBack() {
+    if (currentIndex === 0) {
+      setScreen("start");
+      return;
+    }
+    setAnswers(answers.slice(0, -1));
+    setCurrentIndex(currentIndex - 1);
   }
 
   function handleRetry() {
@@ -83,6 +103,21 @@ function App() {
           currentIndex={currentIndex}
           total={TOTAL_QUESTIONS}
           onSelect={handleSelect}
+          onBack={handleBack}
+          text={config}
+          onToggleLang={handleToggleLang}
+        />
+      </div>
+    );
+  }
+
+  if (screen === "profile") {
+    return (
+      <div className="app">
+        <ProfileScreen
+          results={results}
+          resultKey={resultKey}
+          onContinue={handleShowResult}
           text={config}
           onToggleLang={handleToggleLang}
         />

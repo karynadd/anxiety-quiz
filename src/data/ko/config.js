@@ -7,6 +7,11 @@ export const START_FOOTER_LINES = [
   "정답은 없어요 — 스스로를 비춰볼 뿐이에요.",
 ];
 export const QUESTION_FOOTER_TEXT = "가장 가깝게 느껴지는 답을 골라주세요";
+export const BACK_BUTTON_ARIA = "뒤로 가기";
+export const PROFILE_TITLE = "당신의 불안 프로필";
+export const PROFILE_SUBTITLE =
+  "불안은 여러 모습으로 나타나요. 어떤 모습이 가장 당신과 닮았나요?";
+export const PROFILE_BUTTON_TEXT = "내 결과 살펴보기";
 export const RETRY_BUTTON_TEXT = "처음으로 돌아가기";
 export const RESULT_PRETITLE = "당신의 불안이 닮은 모습은...";
 export const RESULT_TOP_LABEL = APP_TITLE;

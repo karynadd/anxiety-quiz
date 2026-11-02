@@ -19,3 +19,28 @@
   font-style: normal;
   font-display: swap;
 }
+
+/*
+  한글 전용 폰트. unicode-range 덕분에 한글 글자에만 쓰이고, 영어/숫자/문장부호는
+  기존 폰트 그대로 나온다. 영어 화면에서는 파일을 받지도 않는다.
+  Regular와 Bold를 별도 family로 둔 이유: 질문 문구만 Bold를 쓰고, 나머지는 h1 등
+  원래 굵게 표시되는 곳도 Regular로 나와야 한다. font-weight를 전 범위로 잡아서
+  브라우저가 Regular를 가짜로 굵게 만들지 못하게 한다.
+*/
+@font-face {
+  font-family: 'Nanum Myeongjo KO';
+  src: url('../assets/fonts/NanumMyeongjo-Regular.woff2') format('woff2');
+  font-weight: 1 1000;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+1100-11FF, U+3130-318F, U+A960-A97F, U+AC00-D7A3, U+D7B0-D7FF;
+}
+
+@font-face {
+  font-family: 'Nanum Myeongjo KO Question';
+  src: url('../assets/fonts/NanumMyeongjo-Bold.woff2') format('woff2');
+  font-weight: 1 1000;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+1100-11FF, U+3130-318F, U+A960-A97F, U+AC00-D7A3, U+D7B0-D7FF;
+}

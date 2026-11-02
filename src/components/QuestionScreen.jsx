@@ -12,10 +12,11 @@ function QuestionScreen({
   currentIndex,
   total,
   onSelect,
+  onBack,
   text,
   onToggleLang,
 }) {
-  const { APP_TITLE, QUESTION_FOOTER_TEXT } = text;
+  const { APP_TITLE, QUESTION_FOOTER_TEXT, BACK_BUTTON_ARIA } = text;
   const pageNumber = currentIndex + 1;
   const progressPercent = (pageNumber / total) * 100;
   const background = questionAssets[question.id]?.background;
@@ -38,7 +39,17 @@ function QuestionScreen({
       style={{ backgroundImage: `url(${background})` }}
     >
       <div className="question-screen__top">
-        <span className="question-screen__app-title">{APP_TITLE}</span>
+        <span className="question-screen__top-left">
+          <button
+            type="button"
+            className="question-screen__back"
+            aria-label={BACK_BUTTON_ARIA}
+            onClick={onBack}
+          >
+            ‹
+          </button>
+          <span className="question-screen__app-title">{APP_TITLE}</span>
+        </span>
         <span className="question-screen__top-right">
           <span className="question-screen__page">
             {pad2(pageNumber)} / {pad2(total)}

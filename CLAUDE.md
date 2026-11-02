@@ -3,8 +3,9 @@
 ## 확정된 요구사항
 - 화면: 시작 1개 / 질문 10개 / 결과 4종(결과 페이지 1개가 A~D에 따라 내용이 바뀜)
 - 질문 화면: 상단에 제목 + "01 / 10" 페이지 표시, 진행도 바
-- 이전 질문 기능 없음 (디자이너 결정)
+- 뒤로 가기 버튼 있음: 질문 화면 상단 왼쪽, 누르면 직전 답을 지우고 이전 질문으로 이동, 1번 질문에서는 시작 화면으로 이동 (처음엔 디자이너 결정으로 없었으나 사용자 요청으로 추가, 결과 화면에는 없음)
 - 결과 화면: 다시하기 버튼 (문구: "BACK TO THE START", 디자이너 확정). 상단 라벨(RESULT_TOP_LABEL=APP_TITLE)과 사전 문구(RESULT_PRETITLE="YOUR ANXIETY TAKES THE SHAPE OF...") 추가
+- 중간 화면(ProfileScreen): 10번 질문 다음, 최종 결과 전. 결과 4종 카드를 2x2로 보여주고 나온 결과만 빨간색, 나머지는 파란색. 카드는 클릭 불가, 아래 버튼으로 최종 결과로 이동. 배경은 시작 화면과 동일, 뒤로 가기 없음. 시안: design/ 폴더
 - 결과 계산: 가장 많이 선택된 알파벳(A~D). 동점이면 동점 알파벳 중 "가장 마지막 질문에서 고른 답"이 결과. 답은 질문 순서대로 저장하는 배열로 관리한다.
 - 모바일 전용 (데스크톱에서는 최대 폭만 제한, 프레임 연출 없음)
 - 디자이너가 PNG 에셋과 폰트를 줄 예정 (나중에 교체만 하면 됨)
@@ -19,30 +20,37 @@
 5. 스타일링 (목업 기준 다크 톤, 글로우, 선택지 카드) (5단계 완료)
 6. 에셋/폰트 적용 (PNG는 2x~3x 내보내기 기준, 업스케일 금지) (6단계 완료)
 7. 테스트 (A, B, C, D 4가지 결과와 동점 규칙이 모두 맞는지 확인) (7단계 완료)
-8. GitHub 제출: README 작성, git remote 연결과 push, Settings → Pages 설정 안내
-   - 사용자는 GitHub 사용이 처음이다. 8단계에서는 명령어와 클릭 위치를 하나씩 쉽게 안내할 것.
+8. GitHub 제출: README 작성, git remote 연결과 push, Settings → Pages 설정 (8단계 완료)
+   - 배포: main에 push하면 .github/workflows/deploy.yml이 자동으로 빌드/배포한다. 수정 중에는 push하지 말고 로컬(npm run dev)에서 확인한다.
+   - 사용자는 GitHub 사용이 처음이다. 명령어와 클릭 위치를 안내할 때는 하나씩 쉽게 설명할 것.
 
 ## 폴더 구조
 ```
 src/
   assets/
-    backgrounds/   IntroPage.png, Q1.png~Q10.png (시작/질문 배경, 디자이너 제공)
-    icons/         Button.png (보기/시작/다시하기 공용 버튼 배경)
-    results/       Result1.png~Result4.png (결과 A~D 배경, A=1/B=2/C=3/D=4)
-    fonts/         bodoni-72-smallcaps-book.ttf (제목), Helvetica.ttc (본문)
+    backgrounds/   IntroPage.webp, Q1.webp~Q10.webp (시작/질문 배경, 디자이너 제공, 1290px 폭)
+    icons/         Button.png (화면에는 안 쓰임, 카탈로그용)
+    results/       Result1~4.webp (결과 A~D 배경, A=1/B=2/C=3/D=4), Result1~4Thumb.webp (중간 화면 카드)
+    shadows/       ShadowIntoScreen/Question/ResultHead/UpperBar.webp (글자 뒤 그림자)
+    fonts/         bodoni-72-smallcaps-book.ttf (제목), Helvetica.ttc (본문), NanumMyeongjo-Regular/Bold.woff2 (한글), OFL.txt
   components/
-    StartScreen.jsx / .css   (3단계 완료)
-    QuestionScreen.jsx / .css (3단계 완료)
-    ResultScreen.jsx / .css  (3단계 완료)
+    StartScreen.jsx / .css
+    QuestionScreen.jsx / .css
+    ProfileScreen.jsx / .css  (중간 화면: 결과 4종 중 내 결과 표시)
+    ResultScreen.jsx / .css
+    LanguageToggle.jsx / .css
   data/
-    questions.js   (질문 10개 + 보기, 2단계에서 작성 완료)
-    results.js     (결과 A~D 문구, 2단계에서 작성 완료)
-    config.js      (앱 제목/버튼 문구 등, 2단계에서 작성 완료)
-    assets.js      (화면별 에셋 경로 ESM import 모음, 3단계에서 작성 완료)
+    questions.js   (질문 10개 + 보기)
+    results.js     (결과 A~D 문구)
+    config.js      (앱 제목/버튼 문구 등)
+    ko/            (questions/results/config의 한글판)
+    content.js     (언어별 문구 묶음)
+    assets.js      (화면별 에셋 경로 ESM import 모음)
   styles/
-    fonts.css      (@font-face 등록 완료: Bodoni 72 Smallcaps Book, Helvetica)
-    global.css     (모바일 전용 기본 스타일, --font-title / --font-body 변수, .screen-bg 공통 배경 클래스)
-  App.jsx          (실제 퀴즈 흐름: start → question(0~9) → result → retry, 4단계 완료)
+    fonts.css      (@font-face: Bodoni 72 Smallcaps Book, Helvetica, 나눔명조)
+    global.css     (모바일 전용 기본 스타일, --font-title / --font-body / --font-question 변수, .screen-bg 공통 배경 클래스)
+    shadows.css    (글자 뒤 그림자. 맨 위 :root에서 위치/크기/진하기 조절)
+  App.jsx          (실제 퀴즈 흐름: start → question(0~9) → profile → result → retry)
   utils/
     calculateResult.js (결과 계산 순수 함수, 4단계에서 작성 완료)
     preloadAssets.js   (폰트 preload 링크 삽입 + 질문/결과 배경 Image 프리로드, 5단계에서 작성 완료)
@@ -56,9 +64,9 @@ scripts/
 - 폰트 파일명은 디자이너 확정 폰트(제목=Bodoni 72 Smallcaps Book, 본문=Helvetica)와 정확히 일치해서 매칭에 모호함 없었음.
 - `Bodoni 72 Smallcaps Book.ttf`는 원래 파일명에 공백이 있어 `bodoni-72-smallcaps-book.ttf`로 사용자 승인 하에 변경함 (git mv로 이력 보존).
 - `Helvetica.ttc`는 TrueType Collection 포맷이라 브라우저 @font-face 표준 포맷(ttf/otf/woff/woff2)이 아님. 사용자 승인으로 일단 `format('truetype')`으로 등록해둔 상태. 실제 기기에서 깨지면 디자이너에게 ttf/otf/woff2로 재요청 필요 (fonts.css에 TODO 주석 있음).
-- PNG 파일명(IntroPage, Q1~Q10, Button, Result1~4)은 대문자가 섞여 있지만 공백/한글은 없고 ESM import로만 참조하므로 변경하지 않음.
-- PNG는 전부 1.5MB를 초과함 (1.56MB~2.35MB, 16개 합계 약 27MB). 6단계에서 사용자에게 확인 후 "일단 그대로 두고 배포 후 체감 속도 보고 판단"으로 결정함. 나중에 로딩이 느리다고 느껴지면 압축 고려.
-- 해상도 검증(6단계): 배경/결과 PNG는 전부 941x1672, 앱 렌더 최대 폭이 430px로 고정이라 약 2.19배 — 2x 기기에서는 선명하고, 극히 일부 430px 근처 3x 기기에서만 아주 약간 늘어날 수 있는 정도. 업스케일 없음, 기준 충족.
+- 배경 교체: 디자이너 새 배경은 1560x3376 PNG(15장 77MB)라서 1290px 폭 WebP q92로 변환해 4.5MB로 줄임 (앱 렌더 최대 폭 430px의 3배). q85는 질감이 뭉개져서 쓰지 않음. 변환 도구(sharp)는 프로젝트에 설치하지 않고 임시 폴더에서만 썼다.
+- 원본 PNG/zip(new/, UpdatedAssets.zip, 루트 IntroPage.png)과 참고 시안(design/), 나눔명조 ttf는 커밋하지 않는다.
+- 질문 문구의 영어는 Bodoni Smallcaps에 소문자가 없어서 임시로 Georgia를 쓴다 (--font-question). 일반 Bodoni 파일을 받으면 교체.
 - `src/assets/icons/Button.png`는 assets.js에 import만 되어 있고 실제 화면에는 전혀 쓰이지 않음 (버튼은 전부 CSS 그라디언트). 6단계에서 사용자 확인 후 "그대로 두기"로 결정 — 나중에 이미지 기반 버튼으로 바꿀 수도 있어서 카탈로그 용도로 남겨둠.
 - A=Result1.png / B=Result2.png / C=Result3.png / D=Result4.png 매칭은 이미지 내용(눈/얽힌 실/추락하는 협곡/구체)이 각 결과 문구와 일치하는 것을 직접 확인함.
 
@@ -90,7 +98,7 @@ scripts/
 - App.jsx가 `lang` 상태를 갖고 각 화면에 `text`(해당 언어 config)와 `onToggleLang`을 넘긴다. 선택 언어는 localStorage(`anxiety-quiz-lang`)에 저장되고 다시하기 후에도 유지된다.
 - 토글 버튼(`LanguageToggle`)은 시작/결과 화면에서는 우측 상단 모서리, 질문 화면에서는 "01 / 10" 옆에 둔다 (페이지 번호와 겹치지 않게).
 - `<html lang>`을 언어에 맞춰 바꾸고, `:lang(ko)`에서 `word-break: keep-all`(어절 단위 줄바꿈) 적용.
-- Bodoni/Helvetica에는 한글 글리프가 없어서 한글은 기기 기본 폰트로 표시된다. 디자이너가 한글 폰트를 주면 fonts.css에 추가하면 됨.
+- 한글 폰트는 나눔명조(OFL 라이선스): 질문 문구=Bold, 나머지=Regular, ExtraBold는 안 씀. fonts.css에서 unicode-range로 한글 글자에만 적용되고(영어/숫자/문장부호는 기존 폰트), 웹에서는 ttf를 변환한 woff2만 쓴다.
 - `validate-data.mjs`가 ko 데이터가 영어와 같은 구조인지(질문 id, 보기 key, 결과 필드, config 항목)도 검사한다.
 
 ## 주의

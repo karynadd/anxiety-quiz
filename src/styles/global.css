@@ -1,8 +1,12 @@
 :root {
-  --font-title: 'Bodoni 72 Smallcaps Book', 'Georgia', 'Noto Serif KR', serif;
-  --font-body: 'Helvetica', -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    'Noto Sans KR', sans-serif;
-
+  /* 맨 앞의 Nanum 폰트는 한글 글자에만 적용된다 (fonts.css의 unicode-range). */
+  --font-title: 'Nanum Myeongjo KO', 'Bodoni 72 Smallcaps Book', 'Georgia',
+    'Noto Serif KR', serif;
+  --font-body: 'Nanum Myeongjo KO', 'Helvetica', -apple-system,
+    BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+  /* 질문 문구 전용. Bodoni 72 Smallcaps는 소문자가 없어서(작은 대문자로 그려짐) 임시로 Georgia를 쓴다.
+     디자이너에게 일반 Bodoni 파일을 받으면 fonts.css에 등록하고 맨 앞에 이름만 추가하면 된다. */
+  --font-question: 'Nanum Myeongjo KO Question', 'Georgia', 'Noto Serif KR', serif;
   --color-bg: #05060f;
   --color-text: #f5f5fa;
   --color-coral: #e0605a;
@@ -68,6 +72,9 @@ img {
 }
 
 .screen-bg {
+  position: relative;
+  isolation: isolate; /* shadows.css의 z-index:-1 그림자가 배경 위, 글자 아래에 오게 한다 */
+  overflow: hidden;
   width: 100%;
   min-height: 100dvh;
   background-size: cover;

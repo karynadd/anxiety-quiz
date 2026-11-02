@@ -7,6 +7,11 @@ export const START_FOOTER_LINES = [
   "There are no right answers — only reflections.",
 ];
 export const QUESTION_FOOTER_TEXT = "Choose the answer that feels closest to you";
+export const BACK_BUTTON_ARIA = "Go back";
+export const PROFILE_TITLE = "YOUR ANXIETY PROFILE";
+export const PROFILE_SUBTITLE =
+  "Anxiety takes many shapes. Which one feels most like yours?";
+export const PROFILE_BUTTON_TEXT = "EXPLORE YOUR RESULT";
 export const RETRY_BUTTON_TEXT = "BACK TO THE START";
 export const RESULT_PRETITLE = "YOUR ANXIETY TAKES THE SHAPE OF...";
 export const RESULT_TOP_LABEL = APP_TITLE;
